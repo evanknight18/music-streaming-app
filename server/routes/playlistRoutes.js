@@ -4,9 +4,7 @@ const { check, validationResult } = require('express-validator');
 const authMiddleware = require('../middleware/authMiddleware');
 const Playlist = require('../models/Playlist');
 
-// @route    POST api/playlists
-// @desc     Create a playlist
-// @access   Private
+// Create a playlist
 router.post(
   '/',
   [
@@ -39,9 +37,7 @@ router.post(
   }
 );
 
-// @route    GET api/playlists
-// @desc     Get all playlists for the logged-in user
-// @access   Private
+// Get all playlists for the logged-in user
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const playlists = await Playlist.find({ user: req.user.id });

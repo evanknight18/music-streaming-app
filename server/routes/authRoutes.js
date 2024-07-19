@@ -6,9 +6,7 @@ const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// @route    POST api/auth/register
-// @desc     Register user
-// @access   Public
+// Register user
 router.post(
   '/register',
   [
@@ -64,9 +62,7 @@ router.post(
   }
 );
 
-// @route    POST api/auth/login
-// @desc     Authenticate user & get token
-// @access   Public
+// Login user
 router.post(
   '/login',
   [
@@ -116,9 +112,7 @@ router.post(
   }
 );
 
-// @route    GET api/auth
-// @desc     Get user by token
-// @access   Private
+// Get logged-in user
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
