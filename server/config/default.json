@@ -1,0 +1,5 @@
+{
+    "mongoURI": "mongodb+srv://eknight18:ssnake666@cluster0.dqrmmmc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    "jwtSecret": "your_jwt_secret"
+  }
+  

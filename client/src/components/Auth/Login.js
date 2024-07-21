@@ -1,48 +1,53 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux/actions/authActions';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Container, Typography, Box } from '@mui/material';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const history = useHistory();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      history.push('/playlists');
-    } catch (err) {
-      console.error(err.response.data);
-    }
+    dispatch(login(email, password));
+    navigate('/playlists');
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 8 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Login
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
+          <TextField
+            label="Password"
             type="password"
+            variant="outlined"
+            fullWidth
+            margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Login
+          </Button>
+        </form>
+      </Box>
+    </Container>
   );
 };
 

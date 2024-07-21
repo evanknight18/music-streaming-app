@@ -1,45 +1,56 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchSpotify } from '../redux/actions/spotifyActions';
+import { TextField, Button, Container, Typography, List, ListItem, ListItemText, Box, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 const Search = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const [filter, setFilter] = useState('');
+  const dispatch = useDispatch();
+  const results = useSelector(state => state.spotify.results);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.get('/api/spotify/search', {
-        params: { query },
-      });
-      setResults(res.data.tracks.items);
-    } catch (err) {
-      console.error(err.response.data);
-    }
+    dispatch(searchSpotify(query, filter));
   };
 
   return (
-    <div>
-      <h2>Search Music</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>Search</label>
-          <input
-            type="text"
+    <Container maxWidth="md">
+      <Box sx={{ mt: 8 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Search Music
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            margin="normal"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             required
           />
-        </div>
-        <button type="submit">Search</button>
-      </form>
-      <ul>
-        {results.map((track) => (
-          <li key={track.id}>
-            {track.name} by {track.artists[0].name}
-          </li>
-        ))}
-      </ul>
-    </div>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Filter</InputLabel>
+            <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <MenuItem value="artist">Artist</MenuItem>
+              <MenuItem value="album">Album</MenuItem>
+              <MenuItem value="track">Track</MenuItem>
+            </Select>
+          </FormControl>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Search
+          </Button>
+        </form>
+        <List>
+          {results.map((track) => (
+            <ListItem key={track.id}>
+              <ListItemText primary={`${track.name} by ${track.artists[0].name}`} />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </Container>
   );
 };
 
