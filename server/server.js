@@ -1,7 +1,8 @@
 const express = require('express');
+const cors = require('cors'); // Import cors
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
-const playlistRoutes = require('./routes/playlistRoutes'); 
+const playlistRoutes = require('./routes/playlistRoutes');
 const path = require('path');
 
 const app = express();
@@ -11,6 +12,7 @@ connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(cors()); // Use cors middleware
 
 // Define Routes
 app.use('/api/auth', authRoutes);
