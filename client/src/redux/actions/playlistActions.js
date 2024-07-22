@@ -1,10 +1,15 @@
 import axios from 'axios';
-import { GET_PLAYLISTS, PLAYLIST_ERROR, ADD_PLAYLIST, DELETE_PLAYLIST } from './types';
+import {
+  GET_PLAYLISTS,
+  ADD_PLAYLIST,
+  DELETE_PLAYLIST,
+  PLAYLIST_ERROR
+} from './types';
 
 // Get Playlists
 export const getPlaylists = () => async dispatch => {
   try {
-    const res = await axios.get('/api/playlists');
+    const res = await axios.get('http://localhost:5000/api/playlists');
 
     dispatch({
       type: GET_PLAYLISTS,
@@ -19,17 +24,15 @@ export const getPlaylists = () => async dispatch => {
 };
 
 // Add Playlist
-export const addPlaylist = ({ name, description }) => async dispatch => {
+export const addPlaylist = (playlist) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ name, description });
-
   try {
-    const res = await axios.post('/api/playlists', body, config);
+    const res = await axios.post('http://localhost:5000/api/playlists', playlist, config);
 
     dispatch({
       type: ADD_PLAYLIST,
@@ -44,9 +47,9 @@ export const addPlaylist = ({ name, description }) => async dispatch => {
 };
 
 // Delete Playlist
-export const deletePlaylist = id => async dispatch => {
+export const deletePlaylist = (id) => async dispatch => {
   try {
-    await axios.delete(`/api/playlists/${id}`);
+    await axios.delete(`http://localhost:5000/api/playlists/${id}`);
 
     dispatch({
       type: DELETE_PLAYLIST,

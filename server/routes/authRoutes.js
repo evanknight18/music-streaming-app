@@ -1,7 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const User = require('../models/User');
 const { generateToken } = require('../utils/auth');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -29,7 +32,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Login route
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -48,6 +51,17 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error during login:', error.message);
     res.status(500).json({ error: 'Error logging in', message: error.message });
+  }
+});
+
+// Load user
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 });
 

@@ -1,12 +1,17 @@
-import { GET_PLAYLISTS, PLAYLIST_ERROR, ADD_PLAYLIST, DELETE_PLAYLIST } from '../actions/types';
+import {
+  GET_PLAYLISTS,
+  ADD_PLAYLIST,
+  DELETE_PLAYLIST,
+  PLAYLIST_ERROR
+} from '../actions/types';
 
 const initialState = {
   playlists: [],
   loading: true,
-  error: {}
+  error: null
 };
 
-function playlistReducer(state = initialState, action) {
+export default function playlistReducer(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -19,7 +24,7 @@ function playlistReducer(state = initialState, action) {
     case ADD_PLAYLIST:
       return {
         ...state,
-        playlists: [...state.playlists, payload],
+        playlists: [payload, ...state.playlists],
         loading: false
       };
     case DELETE_PLAYLIST:
@@ -38,5 +43,3 @@ function playlistReducer(state = initialState, action) {
       return state;
   }
 }
-
-export default playlistReducer;

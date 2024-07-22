@@ -7,7 +7,8 @@ import AddPlaylist from './AddPlaylist';
 
 const Playlists = () => {
   const dispatch = useDispatch();
-  const playlists = useSelector(state => state.playlists.playlists);
+  const playlistsState = useSelector(state => state.playlist); // Adjusted for correct state
+  const { playlists, loading, error } = playlistsState; // Destructure the state
 
   useEffect(() => {
     dispatch(getPlaylists());
@@ -17,6 +18,14 @@ const Playlists = () => {
     dispatch(deletePlaylist(id));
   };
 
+  if (loading) {
+    return <Typography variant="h6">Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography variant="h6" color="error">{error.msg}</Typography>;
+  }
+
   return (
     <Container maxWidth="md">
       <Box sx={{ mt: 8 }}>
@@ -24,16 +33,21 @@ const Playlists = () => {
           Your Playlists
         </Typography>
         <AddPlaylist />
-        <List>
-          {playlists.map((playlist) => (
-            <ListItem key={playlist._id}>
-              <ListItemText primary={playlist.name} secondary={playlist.description} />
-              <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(playlist._id)}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
+        {playlists.length > 0 ? (
+          <List>
+            {playlists.map((playlist) => (
+              <ListItem key={playlist._id} secondaryAction={
+                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(playlist._id)}>
+                  <DeleteIcon />
+                </IconButton>
+              }>
+                <ListItemText primary={playlist.name} secondary={playlist.description} />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography variant="body1">No playlists found</Typography>
+        )}
       </Box>
     </Container>
   );

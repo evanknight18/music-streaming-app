@@ -55,7 +55,7 @@ const Auth = () => {
             <Tab label="Login" />
             <Tab label="Register" />
           </Tabs>
-          {error && <p style={{ color: 'red' }}>{error.msg}</p>}
+          {error && <p style={{ color: 'red' }}>{error[0].msg}</p>}
           <form onSubmit={onSubmit}>
             {!isLogin && (
               <TextField
@@ -71,11 +71,11 @@ const Auth = () => {
             <TextField
               label="Email"
               variant="outlined"
-              fullWidth
-              margin="normal"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+                fullWidth
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
             />
             <TextField
               label="Password"

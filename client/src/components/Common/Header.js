@@ -1,33 +1,39 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    backgroundColor: theme.palette.background.default,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    color: theme.palette.text.primary,
-  },
-}));
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '../../redux/actions/authActions';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 
 const Header = () => {
-  const classes = useStyles();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector(state => state.auth);
+  const { isAuthenticated } = auth;
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   return (
-    <AppBar position="static" className={classes.appBar}>
+    <AppBar position="static">
       <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          Music Streaming App
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          TuneFlow
         </Typography>
+        {isAuthenticated ? (
+          <Box>
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Box>
+        ) : (
+          <Box>
+            <Button color="inherit" component={Link} to="/">
+              Login
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );

@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
-import authReducer from './authReducer';
 import playlistReducer from './playlistReducer';
-import spotifyReducer from './spotifyReducer';
+import authReducer from './authReducer';
 
 export default combineReducers({
-  auth: authReducer,
-  playlists: playlistReducer,
-  spotify: spotifyReducer
+  playlist: playlistReducer,
+  auth: authReducer
 });

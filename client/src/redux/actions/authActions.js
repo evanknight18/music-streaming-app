@@ -17,7 +17,7 @@ export const loadUser = () => async dispatch => {
   }
 
   try {
-    const res = await axios.get('/api/auth');
+    const res = await axios.get('http://localhost:5000/api/auth');
 
     dispatch({
       type: USER_LOADED,
@@ -41,7 +41,7 @@ export const register = ({ name, email, password }) => async dispatch => {
   const body = JSON.stringify({ name, email, password });
 
   try {
-    const res = await axios.post('http://localhost:5000/api/auth/register', body, config); // Ensure the URL is correct
+    const res = await axios.post('http://localhost:5000/api/auth/register', body, config);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -68,7 +68,7 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post('/api/auth', body, config);
+    const res = await axios.post('http://localhost:5000/api/auth', body, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -87,4 +87,6 @@ export const login = (email, password) => async dispatch => {
 // Logout / Clear Profile
 export const logout = () => dispatch => {
   dispatch({ type: LOGOUT });
+  localStorage.removeItem('token');
+  setAuthToken(null);
 };
